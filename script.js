@@ -9,17 +9,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const width = +svg.attr("width") - margin.left - margin.right;
     const height = +svg.attr("height") - margin.top - margin.bottom;
     const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
 
     d3.csv('mock_stock_data.csv').then(data => {
-        
         data.forEach(d => {
             d.Date = new Date(d.Date);
             d.Price = +d.Price;
         });
 
-        // for getting unique stock names
         const stockNames = [...new Set(data.map(d => d.Stock))];
-
         stockNames.forEach(stock => {
             const option = document.createElement('option');
             option.value = stock;
@@ -42,12 +43,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const xAxis = g.append("g")
             .attr("transform", `translate(0,${height})`);
-
-       
         const yAxis = g.append("g");
 
         function updateVisualization(filteredData) {
-         
             x.domain(d3.extent(filteredData, d => d.Date));
             y.domain([0, d3.max(filteredData, d => d.Price)]);
 
@@ -66,6 +64,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
             xAxis.transition().duration(750).call(d3.axisBottom(x));
             yAxis.transition().duration(750).call(d3.axisLeft(y));
+
+            const points = g.selectAll(".dot")
+                .data(filteredData);
+
+            points.enter().append("circle")
+                .attr("class", "dot")
+                .attr("r", 5)
+                .attr("cx", d => x(d.Date))
+                .attr("cy", d => y(d.Price))
+                .on("mouseover", function(event, d) {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip.html(`Stock: ${d.Stock}<br/>Price: ${d.Price}<br/>Date: ${d.Date.toDateString()}`)
+                        .style("left", (event.pageX + 5) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function(d) {
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                })
+                .merge(points)
+                .transition()
+                .duration(750)
+                .attr("cx", d => x(d.Date))
+                .attr("cy", d => y(d.Price));
+
+            points.exit().remove();
         }
 
         function filterData() {
@@ -92,3 +119,4 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Error loading the CSV file:', error);
     });
 });
+
