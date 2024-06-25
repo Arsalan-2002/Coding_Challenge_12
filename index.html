@@ -4,6 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Data Visualization Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,18 +12,19 @@
     <h1>Stock Data Visualization Dashboard</h1>
     <div>
         <label for="stockSelect">Select Stock:</label>
-        <select id="stockSelect"></select>
+        <select id="stockSelect" aria-label="Select Stock"></select>
     </div>
     <div>
         <label for="dateRange">Select Date Range:</label>
-        <input type="date" id="startDate">
-        <input type="date" id="endDate">
+        <input type="date" id="startDate" aria-label="Start Date">
+        <input type="date" id="endDate" aria-label="End Date">
     </div>
     <div id="chart">
-        <svg width="600" height="600"></svg>
+        <svg width="600" height="600" role="img" aria-label="Stock Data Line Chart"></svg>
     </div>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
+
 
