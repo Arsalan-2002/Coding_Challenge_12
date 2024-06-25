@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic Data Visualization Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Stock Data Visualization Dashboard</h1>
+    <div>
+        <label for="stockSelect">Select Stock:</label>
+        <select id="stockSelect"></select>
+    </div>
+    <div>
+        <label for="dateRange">Select Date Range:</label>
+        <input type="date" id="startDate">
+        <input type="date" id="endDate">
+    </div>
+    <div id="chart"></div>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
